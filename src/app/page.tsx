@@ -1,7 +1,11 @@
-import Image from "next/image";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 
-export default function Home() {
+function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24"></main>
+    <main className="flex min-h-screen flex-col items-center dark:bg-black  justify-between p-24">
+      <ThemeSwitcher />
+    </main>
   );
 }
+
+export default Home;
