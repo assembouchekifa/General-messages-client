@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { GrSend } from "react-icons/gr";
 
-function Sande() {
+function Sande({ io }: { io: any }) {
   const [message, setMessage] = useState({ message: "" });
   const rout = useRouter();
 
@@ -12,7 +12,7 @@ function Sande() {
     if (message.message == "") {
       return;
     }
-    const res = await fetch("/api/message", {
+    const res = await fetch("https://general-messages-server.onrender.com", {
       method: "POST",
       body: JSON.stringify(message),
       headers: {
@@ -22,6 +22,7 @@ function Sande() {
     if (!res.ok) {
       throw new Error("not create");
     }
+    io.emit("chat", message.message);
     rout.refresh();
     setMessage({ message: "" });
   }
