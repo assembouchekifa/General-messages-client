@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GrSend } from "react-icons/gr";
 
 function Sande({ io }: { io: any }) {
@@ -9,12 +9,14 @@ function Sande({ io }: { io: any }) {
   const rout = useRouter();
 
   async function hundelClic() {
-    if (message.message == "") {
+    const mes = message;
+    setMessage({ message: "" });
+    if (mes.message == "") {
       return;
     }
     const res = await fetch("https://general-messages-server.onrender.com", {
       method: "POST",
-      body: JSON.stringify(message),
+      body: JSON.stringify(mes),
       headers: {
         "Content-Type": "application/json",
       },
@@ -22,15 +24,19 @@ function Sande({ io }: { io: any }) {
     if (!res.ok) {
       throw new Error("not create");
     }
-    io.emit("chat", message.message);
+    io.emit("chat", mes.message);
     rout.refresh();
-    setMessage({ message: "" });
   }
 
   return (
     <div className="fixed bottom-0 w-full px-0 sm:px-24    ">
       <div className="w-full flex items-center dark:bg-zinc-950 bg-zinc-300 rounded-md p-4">
         <input
+          onKeyUp={(e) => {
+            if (e.key == "Enter") {
+              hundelClic();
+            }
+          }}
           type="text"
           value={message.message}
           onChange={(e) => {
